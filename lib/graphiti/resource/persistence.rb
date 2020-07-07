@@ -94,7 +94,7 @@ module Graphiti
 
         run_callbacks :persistence, :update, update_params, meta do
           run_callbacks :attributes, :update, update_params, meta do |params|
-            model_instance = self.class._find(id: id).data
+            model_instance = self.class._find({ id: id }, scope(meta)).data
             call_with_meta(:assign_attributes, model_instance, params, meta)
             model_instance
           end
@@ -108,7 +108,7 @@ module Graphiti
       end
 
       def destroy(id, meta = nil)
-        model_instance = self.class._find(id: id).data
+        model_instance = self.class._find({ id: id }, scope(meta)).data
         run_callbacks :destroy, :destroy, model_instance, meta do
           call_with_meta(:delete, model_instance, meta)
         end
@@ -116,7 +116,8 @@ module Graphiti
       end
 
       def build(model, meta = nil)
-        adapter.build(model)
+        # TODO: Arity check so as not to break other adapters
+        adapter.build(model, scope(meta))
       end
 
       def assign_attributes(model_instance, update_params, meta = nil)
@@ -132,6 +133,10 @@ module Graphiti
       end
 
       private
+
+      def scope(meta)
+        meta&.fetch(:scope, nil)&.object || base_scope
+      end
 
       def run_callbacks(kind, action, *args)
         fire_around_callbacks(kind, action, *args) do |*yieldargs|

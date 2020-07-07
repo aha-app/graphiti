@@ -381,7 +381,7 @@ module Graphiti
         raise "you must override #disassociate in an adapter subclass"
       end
 
-      def build(model_class)
+      def build(model_class, scope)
         model_class.new
       end
 

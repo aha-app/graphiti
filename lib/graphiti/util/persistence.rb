@@ -7,13 +7,14 @@ class Graphiti::Util::Persistence
   # @param [Hash] relationships see (Deserializer#relationships)
   # @param [Model] caller_model The persisted parent object in the request graph
   # @param [Symbol] foreign_key Attribute assigned by parent object in graph
-  def initialize(resource, meta, attributes, relationships, caller_model, foreign_key = nil)
+  def initialize(resource, meta, attributes, relationships, caller_model, foreign_key = nil, scope = nil)
     @resource = resource
     @meta = meta
     @attributes = attributes
     @relationships = relationships
     @caller_model = caller_model
     @foreign_key = foreign_key
+    @scope = scope
 
     # Find the correct child resource for a given jsonapi type
     if (meta_type = @meta[:type].try(:to_sym))
@@ -222,7 +223,8 @@ class Graphiti::Util::Persistence
       temp_id: @meta[:temp_id],
       caller_model: @caller_model,
       attributes: @attributes,
-      relationships: @relationships
+      relationships: @relationships,
+      scope: @scope
     }
   end
 

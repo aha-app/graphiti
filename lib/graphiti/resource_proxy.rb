@@ -98,7 +98,10 @@ module Graphiti
           @resource.persist_with_relationships \
             @payload.meta(action: action),
             @payload.attributes,
-            @payload.relationships
+            @payload.relationships,
+            nil,
+            nil,
+            @scope
         }
       ensure
         Graphiti.context[:namespace] = original
@@ -119,7 +122,7 @@ module Graphiti
 
     def destroy
       transaction_response = @resource.transaction do
-        metadata = {method: :destroy}
+        metadata = {method: :destroy, scope: @scope}
         model = @resource.destroy(@query.filters[:id], metadata)
         model.instance_variable_set(:@__serializer_klass, @resource.serializer)
         @resource.after_graph_persist(model, metadata)

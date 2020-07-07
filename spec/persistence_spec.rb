@@ -1529,7 +1529,7 @@ RSpec.describe "persistence" do
         it "works" do
           employee = PORO::Employee.create(first_name: "Jane")
           klass.find(id: employee.id).destroy
-          expect(klass.meta).to eq(method: :destroy)
+          expect(klass.meta).to include(method: :destroy)
         end
       end
 
@@ -1547,7 +1547,7 @@ RSpec.describe "persistence" do
         it "works" do
           employee = PORO::Employee.create(first_name: "Jane")
           klass.find(id: employee.id).destroy
-          expect(klass.meta).to eq(method: :destroy)
+          expect(klass.meta).to include(method: :destroy)
         end
       end
 
@@ -1598,6 +1598,7 @@ RSpec.describe "persistence" do
             method: :destroy,
             attributes: {employee_id: nil, id: 1},
             relationships: {},
+            scope: nil,
             temp_id: nil
           })
           expect(position_resource.meta[:caller_model]).to be_a(PORO::Employee)
@@ -1618,7 +1619,7 @@ RSpec.describe "persistence" do
         it "works" do
           employee = PORO::Employee.create(first_name: "Jane")
           klass.find(id: employee.id).destroy
-          expect(klass.meta).to eq(method: :destroy)
+          expect(klass.meta).to include(method: :destroy)
         end
       end
 
@@ -1636,7 +1637,7 @@ RSpec.describe "persistence" do
         it "works" do
           employee = PORO::Employee.create(first_name: "Jane")
           klass.find(id: employee.id).destroy
-          expect(klass.meta).to eq(method: :destroy)
+          expect(klass.meta).to include(method: :destroy)
         end
       end
     end
@@ -1656,7 +1657,7 @@ RSpec.describe "persistence" do
       it "works" do
         employee = PORO::Employee.create(first_name: "Jane")
         klass.find(id: employee.id).destroy
-        expect(klass.meta).to eq(method: :destroy)
+        expect(klass.meta).to include(method: :destroy)
       end
     end
 
@@ -1742,7 +1743,7 @@ RSpec.describe "persistence" do
       it "works" do
         employee = PORO::Employee.create(first_name: "Jane")
         klass.find(id: employee.id).destroy
-        expect(klass.meta).to eq(method: :destroy)
+        expect(klass.meta).to include(method: :destroy)
       end
     end
   end
